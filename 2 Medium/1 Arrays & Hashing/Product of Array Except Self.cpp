@@ -17,6 +17,7 @@ public:
         vector<int> result(n, 1);
         int prefix = 1;
         //loops through the vector from left to right
+        //calculates the product of all numbers to the left of i
         for (int i = 0; i < n; i++) {
             //stores the prefix in the result output
             result[i] = prefix;
@@ -26,6 +27,9 @@ public:
 
         int postfix = 1;
         //loops through the vector from right to left
+        //calculates the product of all numbers to the right of i
+        //this value gets multiplied by result[i] which is the stored prefix
+        //prefix * postfix is the product except self
         for (int i = n - 1; i >= 0; i--) {
             //stores the new result as the saved prefix multiplied by the postfix
             result[i] = result[i] * postfix;

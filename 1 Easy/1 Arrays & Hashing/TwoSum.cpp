@@ -22,7 +22,7 @@ public:
                 //if the complement is in the map pushes the complements index to the result and pushes the index of current number that satisfies the complement and exits the loop
                 result.push_back(m[complement]);
                 result.push_back(i);
-                break;
+                return resul;
             }
             //if the complement is not currently in the map then the number is inserted in
             else {

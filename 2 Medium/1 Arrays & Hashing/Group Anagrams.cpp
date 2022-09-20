@@ -25,6 +25,7 @@ public:
         vector<vector<string>> anagrams;
         //loops through the map
         for (auto p : mp) {
+            //pushes back the second value of p which is the mapped value
             anagrams.push_back(p.second);
         }
         return anagrams;
