@@ -14,9 +14,11 @@ public:
     int longestConsecutive(vector<int>& nums) {
         unordered_set<int>s(nums.begin(), nums.end());
         int longest = 0;
-        //iterates over 
+        //iterates over s
         for (auto& n : s) {
             //if this is the start of the sequence
+            //s.count is used to find if n-1 is in the set
+            //if n-1 is not in the list then that means this number is the start of the sequence
             if (!s.count(n - 1)) {
                 int length = 1;
                 //while there is a next number in the sequence length gets incremented by 1
