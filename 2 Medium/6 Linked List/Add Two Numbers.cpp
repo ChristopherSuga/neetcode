@@ -1,55 +1,57 @@
 /*
-    Design time-based key-value structure, multiple vals at diff times
+    Given 2 linked lists, digits stored in reverse order, add them
+    Ex. l1 = [2,4,3] l2 = [5,6,4] -> [7,0,8] (342 + 465 = 807)
 
-    Hash map, since timestamps are naturally in order, binary search
+    Sum digit-by-digit + carry, handle if one list becomes null
 
-    Time: O(log n)
-    Space: O(n)
+    Time: O(max(m, n))
+    Space: O(max(m, n))
 */
 
-class TimeMap {
-public:
-    TimeMap() {
-
-    }
-
-    void set(string key, string value, int timestamp) {
-        m[key].push_back({ timestamp, value });
-    }
-
-    string get(string key, int timestamp) {
-        if (m.find(key) == m.end()) {
-            return "";
-        }
-
-        int low = 0;
-        int high = m[key].size() - 1;
-
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (m[key][mid].first < timestamp) {
-                low = mid + 1;
-            }
-            else if (m[key][mid].first > timestamp) {
-                high = mid - 1;
-            }
-            else {
-                return m[key][mid].second;
-            }
-        }
-
-        if (high >= 0) {
-            return m[key][high].second;
-        }
-        return "";
-    }
-private:
-    unordered_map<string, vector<pair<int, string>>> m;
-};
-
 /**
- * Your TimeMap object will be instantiated and called as such:
- * TimeMap* obj = new TimeMap();
- * obj->set(key,value,timestamp);
- * string param_2 = obj->get(key,timestamp);
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
  */
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummy = new ListNode();
+
+        ListNode* curr = dummy;
+        int carry = 0;
+        //adds the nodes as long as one is not null
+        while (l1 != NULL || l2 != NULL) {
+            //elvis operator if l1!=NULL then val == l1->val else val1 = 0
+            int val1 = (l1 != NULL) ? l1->val : 0;
+            int val2 = (l2 != NULL) ? l2->val : 0;
+
+            //basic math to add the two nodes
+            int sum = val1 + val2 + carry;
+            //carry is equal to the sum/10 ex. (15/10 = 1)
+            carry = sum / 10;
+            //adds a new node that equals the sum mod 10 ex. (15%10 = 5)
+            curr->next = new ListNode(sum % 10);
+            //shifts the new lists current pointer
+            curr = curr->next;
+            //shifts both lists as long as they are not null
+            if (l1 != NULL) {
+                l1 = l1->next;
+            }
+            if (l2 != NULL) {
+                l2 = l2->next;
+            }
+        }
+        //edge case to create a new listNode with the carry value in case the number addded is too long
+        if (carry == 1) {
+            curr->next = new ListNode(1);
+        }
+
+        return dummy->next;
+    }
+};

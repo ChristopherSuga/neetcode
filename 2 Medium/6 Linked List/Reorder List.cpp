@@ -1,55 +1,75 @@
 /*
-    Design time-based key-value structure, multiple vals at diff times
+    Given head of linked-list, reorder list alternating outside in
+    Ex. head = [1,2,3,4] -> [1,4,2,3], head = [1,2,3,4,5] -> [1,5,2,4,3]
 
-    Hash map, since timestamps are naturally in order, binary search
+    Find middle node, split in half, reverse 2nd half of list, merge
 
-    Time: O(log n)
-    Space: O(n)
+    Time: O(n)
+    Space: O(1)
 */
 
-class TimeMap {
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
-    TimeMap() {
-
-    }
-
-    void set(string key, string value, int timestamp) {
-        m[key].push_back({ timestamp, value });
-    }
-
-    string get(string key, int timestamp) {
-        if (m.find(key) == m.end()) {
-            return "";
+    void reorderList(ListNode* head) {
+        if (head->next == NULL) {
+            return;
         }
 
-        int low = 0;
-        int high = m[key].size() - 1;
+        ListNode* prev = NULL;
+        ListNode* slow = head;
+        ListNode* fast = head;
 
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (m[key][mid].first < timestamp) {
-                low = mid + 1;
-            }
-            else if (m[key][mid].first > timestamp) {
-                high = mid - 1;
-            }
-            else {
-                return m[key][mid].second;
-            }
+        while (fast != NULL && fast->next != NULL) {
+            prev = slow;
+            slow = slow->next;
+            fast = fast->next->next;
         }
 
-        if (high >= 0) {
-            return m[key][high].second;
-        }
-        return "";
+        prev->next = NULL;
+
+        ListNode* l1 = head;
+        ListNode* l2 = reverse(slow);
+
+        merge(l1, l2);
     }
 private:
-    unordered_map<string, vector<pair<int, string>>> m;
-};
+    ListNode* reverse(ListNode* head) {
+        ListNode* prev = NULL;
+        ListNode* curr = head;
+        ListNode* next = curr->next;
 
-/**
- * Your TimeMap object will be instantiated and called as such:
- * TimeMap* obj = new TimeMap();
- * obj->set(key,value,timestamp);
- * string param_2 = obj->get(key,timestamp);
- */
+        while (curr != NULL) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+    void merge(ListNode* l1, ListNode* l2) {
+        while (l1 != NULL) {
+            ListNode* p1 = l1->next;
+            ListNode* p2 = l2->next;
+
+            l1->next = l2;
+            if (p1 == NULL) {
+                break;
+            }
+            l2->next = p1;
+
+            l1 = p1;
+            l2 = p2;
+        }
+    }
+};

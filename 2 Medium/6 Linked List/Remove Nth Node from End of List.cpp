@@ -1,55 +1,49 @@
 /*
-    Design time-based key-value structure, multiple vals at diff times
+    Given head of a linked list, remove nth node from end of list
+    Ex. head = [1,2,3,4,5], n = 2 -> [1,2,3,5]
 
-    Hash map, since timestamps are naturally in order, binary search
+    Create 2 pointers "n" apart, iterate until end, will be at nth
 
-    Time: O(log n)
-    Space: O(n)
+    Time: O(n)
+    Space: O(1)
 */
 
-class TimeMap {
-public:
-    TimeMap() {
-
-    }
-
-    void set(string key, string value, int timestamp) {
-        m[key].push_back({ timestamp, value });
-    }
-
-    string get(string key, int timestamp) {
-        if (m.find(key) == m.end()) {
-            return "";
-        }
-
-        int low = 0;
-        int high = m[key].size() - 1;
-
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (m[key][mid].first < timestamp) {
-                low = mid + 1;
-            }
-            else if (m[key][mid].first > timestamp) {
-                high = mid - 1;
-            }
-            else {
-                return m[key][mid].second;
-            }
-        }
-
-        if (high >= 0) {
-            return m[key][high].second;
-        }
-        return "";
-    }
-private:
-    unordered_map<string, vector<pair<int, string>>> m;
-};
-
 /**
- * Your TimeMap object will be instantiated and called as such:
- * TimeMap* obj = new TimeMap();
- * obj->set(key,value,timestamp);
- * string param_2 = obj->get(key,timestamp);
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
  */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if (head->next == NULL) {
+            return NULL;
+        }
+
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        //while loop to set the fast node n nodes ahead
+        while (n > 0) {
+            fast = fast->next;
+            n--;
+        }
+
+        if (fast == NULL) {
+            return head->next;
+        }
+        //keeps moving both pointers along until the end of the list is reached
+        while (fast->next != NULL) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+        //when the end is reached changes the slow pointer to skip over one node
+        slow->next = slow->next->next;
+        return head;
+    }
+};

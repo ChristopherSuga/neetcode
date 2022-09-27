@@ -22,24 +22,24 @@ public:
             return "";
         }
 
-        int low = 0;
-        int high = m[key].size() - 1;
+        int left = 0;
+        int right = m[key].size() - 1;
 
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
             if (m[key][mid].first < timestamp) {
-                low = mid + 1;
+                left = mid + 1;
             }
             else if (m[key][mid].first > timestamp) {
-                high = mid - 1;
+                right = mid - 1;
             }
             else {
                 return m[key][mid].second;
             }
         }
 
-        if (high >= 0) {
-            return m[key][high].second;
+        if (right >= 0) {
+            return m[key][right].second;
         }
         return "";
     }
