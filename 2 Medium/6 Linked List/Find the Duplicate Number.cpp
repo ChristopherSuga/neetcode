@@ -1,55 +1,56 @@
 /*
-    Design time-based key-value structure, multiple vals at diff times
+    Given int array, return the one repeated number
+    Ex. nums = [1,3,4,2,2] -> 2, nums = [3,1,3,4,2] -> 3
 
-    Hash map, since timestamps are naturally in order, binary search
+    If there's duplicate, must be a cycle, find meeting point
+    Take 1 back to start, they'll intersect at the duplicate
 
-    Time: O(log n)
-    Space: O(n)
+    Time: O(n)
+    Space: O(1)
 */
 
-class TimeMap {
+class Solution {
 public:
-    TimeMap() {
+    int findDuplicate(vector<int>& nums) {
+        int slow = nums[0];
+        int fast = nums[nums[0]];
 
-    }
-
-    void set(string key, string value, int timestamp) {
-        m[key].push_back({ timestamp, value });
-    }
-
-    string get(string key, int timestamp) {
-        if (m.find(key) == m.end()) {
-            return "";
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
         }
 
-        int low = 0;
-        int high = m[key].size() - 1;
-
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (m[key][mid].first < timestamp) {
-                low = mid + 1;
-            }
-            else if (m[key][mid].first > timestamp) {
-                high = mid - 1;
-            }
-            else {
-                return m[key][mid].second;
-            }
+        slow = 0;
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
         }
-
-        if (high >= 0) {
-            return m[key][high].second;
-        }
-        return "";
+        return slow;
     }
-private:
-    unordered_map<string, vector<pair<int, string>>> m;
 };
 
-/**
- * Your TimeMap object will be instantiated and called as such:
- * TimeMap* obj = new TimeMap();
- * obj->set(key,value,timestamp);
- * string param_2 = obj->get(key,timestamp);
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
