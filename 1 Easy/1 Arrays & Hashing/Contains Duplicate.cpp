@@ -15,7 +15,7 @@ public:
         unordered_set<int> s;
         // loops through array
         for (int i = 0; i < nums.size(); i++) {
-            /*s.find(nums[i]) looks for the number in the unordered setand returns s.end() if the number is not found
+            /*s.find(nums[i]) looks for the number in the unordered set and returns s.end() if the number is not found
             * if nums[i] is found in the unordered set then the find function would return an iterator to the number instead of s.end() returning true
             */
             if (s.find(nums[i]) != s.end()) {
